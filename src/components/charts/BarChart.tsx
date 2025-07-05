@@ -1,31 +1,40 @@
 import React ,{memo} from 'react';
 import { Bar } from 'react-chartjs-2';
-// import {
-//     Chart as ChartJS,
-//     CategoryScale,
-//     LinearScale,
-//     PointElement,
-//     LineElement,
-//     Tooltip,
-//     Legend
-// } from 'chart.js';
+import { faker } from '@faker-js/faker';
 
-// ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
 const BarChart = () => {
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+            position: 'top' as const,
+            },
+            title: {
+            display: true,
+            text: 'Chart.js Bar Chart',
+            },
+        },
+    };
+
+    const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+
     const data = {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July' , 'Aug' , 'Sep' ],
+        labels,
         datasets: [
             {
-                label: 'Bar Chart',
-                data: [0, 5, 10, 15, 20, 25, 30, 35, 40],
-                backgroundColor: 'rgba(255, 42, 0, 0.33)',
-                borderColor: 'black',
-                tension: 0.4
-            }
-        ]
-    }
+                label: 'Dataset 1',
+                data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            },
+            {
+                label: 'Dataset 2',
+                data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+                backgroundColor: 'rgba(53, 162, 235, 0.5)',
+            },
+        ],
+    };
 
-    return <Bar data={data} />
+    return <Bar options={options} data={data} />
 }
 
 export default memo(BarChart);

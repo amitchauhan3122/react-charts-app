@@ -1,32 +1,42 @@
 import React, {memo} from 'react';
 import { Line } from 'react-chartjs-2';
-// import {
-//     Chart as ChartJS,
-//     CategoryScale,
-//     LinearScale,
-//     PointElement,
-//     LineElement,
-//     Tooltip,
-//     Legend
-// } from 'chart.js';
-
-// ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
+import { faker } from '@faker-js/faker';
 
 const LineChart = () => {
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top' as const,
+            },
+            title: {
+                display: true,
+                text: 'Chart.js Line Chart',
+            },
+        },
+    };
+
+    const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+
     const data = {
-        labels : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July' , 'Aug' , 'Sep' ],
+        labels,
         datasets: [
             {
-                label: 'Line Chart',
-                backgroundColor: 'rgba(0,0,255,0.4)',
-                borderColor: 'blue',
-                data: [10, 15, 20, 25, 30, 35, 40, 45, 50],
-                tension: 0.4
+                label: 'Dataset 1',
+                data: labels.map(() => faker.number.int({ min: -1000, max: 1000 })),
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            },
+            {
+                label: 'Dataset 2',
+                data: labels.map(() => faker.number.int({ min: -1000, max: 1000 })),
+                borderColor: 'rgb(53, 162, 235)',
+                backgroundColor: 'rgba(53, 162, 235, 0.5)',
             },
         ],
-    }
+    };
 
-    return <Line data={data} />;
+    return <Line options={options} data={data} />;
 
 }
 

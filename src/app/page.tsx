@@ -1,137 +1,133 @@
 'use client';
 import dynamic from 'next/dynamic';
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    BarElement,
-    ArcElement,
-    Tooltip,
-    Legend
-} from 'chart.js';
-
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, Tooltip, Legend);
+// import {
+//     Chart as ChartJS,
+//     CategoryScale,
+//     LinearScale,
+//     PointElement,
+//     LineElement,
+//     BarElement,
+//     ArcElement,
+//     RadialLinearScale,
+//     Filler,
+//     Tooltip,
+//     Legend
+// } from 'chart.js';
+import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { LineChart as LineIcon, BarChart3, PieChart as PieIcon , Circle, Radar, Waves, ScatterChart } from 'lucide-react';
+// ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, RadialLinearScale, Filler, Tooltip, Legend);
+import '@/lib/chartConfig';
 
 const LineChart = dynamic(()=> import('@/components/charts/LineChart'), { ssr: false });
 const BarChart = dynamic (() => import('@/components/charts/BarChart'), { ssr: false });
 const PieChart = dynamic(() => import('@/components/charts/PieChart'), { ssr: false });
-export default function Dashboard () {
+const DoughnutChart = dynamic(() => import('@/components/charts/DoughnutChart'), { ssr: false });
+const RadarChart = dynamic(() => import('@/components/charts/RadarChart'), { ssr: false });
+const AreaChart = dynamic(() => import('@/components/charts/AreaChart'), { ssr: false });
+const ScatterPlotChart = dynamic(() => import('@/components/charts/ScatterPlotChart'), { ssr: false });
+const chartComponents = [
+  { id: 'Line', label: 'Line Chart', icon: LineIcon, Component: LineChart },
+  { id: 'Bar', label: 'Bar Chart', icon: BarChart3, Component: BarChart },
+  { id: 'Pie', label: 'Pie Chart', icon: PieIcon, Component: PieChart },
+  { id: 'Doughnut', label: 'Doughnut Chart', icon: Circle, Component: DoughnutChart },
+  { id: 'Radar', label: 'Radar Chart', icon: Radar, Component: RadarChart },
+  { id: 'Area', label: 'Area Chart', icon: Waves, Component: AreaChart },
+  { id: 'Scatter', label: 'Scatter Plot', icon: ScatterChart, Component: ScatterPlotChart },
+];
+export default function ChartsDashboard () {
+  const [activeChart, setActiveChart] = useState(chartComponents[0].id);
+  const ActiveChartComponent = chartComponents.find(c => c.id === activeChart)?.Component;
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <h1>Charts Demo App</h1>
-        <div className=''>
-          <LineChart />
-          <BarChart />
-          <PieChart /> 
-        </div>
+    <>
+      {/* <div className="min-h-screen p-8 sm:p-20 bg-gray-50">
+        <main className="flex flex-col gap-8 items-center">
+          <h1 className="text-3xl font-bold mb-4 text-center">Charts Demo App</h1>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-7xl">
+            
+            <div className="bg-white p-4 rounded-2xl shadow-sm">
+              <LineChart />
+            </div>
+
+            <div className="bg-white p-4 rounded-2xl shadow-sm">
+              <BarChart />
+            </div>
+
+            <div className="bg-white p-4 rounded-2xl shadow-sm">
+              <PieChart />
+            </div>
+
+            <div className="bg-white p-4 rounded-2xl shadow-sm">
+              <DoughnutChart />
+            </div>
+
+            <div className="bg-white p-4 rounded-2xl shadow-sm">
+              <RadarChart />
+            </div>
+
+            <div className="bg-white p-4 rounded-2xl shadow-sm">
+              <AreaChart />
+            </div>
+
+            <div className="bg-white p-4 rounded-2xl shadow-sm sm:col-span-2 lg:col-span-1">
+              <ScatterPlotChart />
+            </div>
+
+          </div>
+        </main>
+      </div> */}
+      {/* <div className="min-h-screen p-8 sm:p-20 bg-gray-50">
+        <main className="flex flex-col gap-8 items-center">
+          <h1 className="text-3xl font-bold mb-4 text-center">Charts Demo App</h1>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-7xl">
+            {chartComponents.map((chart, index) => (
+              <motion.div
+                key={chart.id}
+                className="bg-white p-4 rounded-2xl shadow-sm"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <chart.Component />
+              </motion.div>
+            ))}
+          </div>
+        </main>
+      </div> */}
+      <div className="min-h-screen p-4 sm:p-8 flex bg-gray-50">
+        <aside className="w-52 bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 mr-4 sticky top-4 self-start">
+          <h2 className="text-lg font-bold mb-4">Charts</h2>
+          <ul className="flex flex-col gap-2">
+            {chartComponents.map(chart => (
+              <li key={chart.id}>
+                <button
+                  onClick={() => setActiveChart(chart.id)}
+                  className={`w-full flex items-center gap-2 p-2 rounded ${
+                    activeChart === chart.id
+                      ? 'bg-blue-100 dark:bg-blue-700/30 text-blue-700 dark:text-blue-300 font-semibold'
+                      : 'hover:bg-gray-100 dark:hover:bg-gray-700'
+                  }`}
+                >
+                  <chart.icon className="w-4 h-4" />
+                  {chart.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </aside>
+
+      <main className="flex-1 bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
+        <motion.div
+          key={activeChart}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          {ActiveChartComponent && <ActiveChartComponent />}
+        </motion.div>
       </main>
-    </div>
+      </div>
+    </>
   )
 }
-
-// import Image from "next/image";
-
-// export default function Home() {
-//   return (
-//     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-//       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-//         <Image
-//           className="dark:invert"
-//           src="/next.svg"
-//           alt="Next.js logo"
-//           width={180}
-//           height={38}
-//           priority
-//         />
-//         <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-//           <li className="mb-2 tracking-[-.01em]">
-//             Get started by editing{" "}
-//             <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-//               src/app/page.tsx
-//             </code>
-//             .
-//           </li>
-//           <li className="tracking-[-.01em]">
-//             Save and see your changes instantly.
-//           </li>
-//         </ol>
-
-//         <div className="flex gap-4 items-center flex-col sm:flex-row">
-//           <a
-//             className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-//             href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-//             target="_blank"
-//             rel="noopener noreferrer"
-//           >
-//             <Image
-//               className="dark:invert"
-//               src="/vercel.svg"
-//               alt="Vercel logomark"
-//               width={20}
-//               height={20}
-//             />
-//             Deploy now
-//           </a>
-//           <a
-//             className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-//             href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-//             target="_blank"
-//             rel="noopener noreferrer"
-//           >
-//             Read our docs
-//           </a>
-//         </div>
-//       </main>
-//       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-//         <a
-//           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-//           href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           <Image
-//             aria-hidden
-//             src="/file.svg"
-//             alt="File icon"
-//             width={16}
-//             height={16}
-//           />
-//           Learn
-//         </a>
-//         <a
-//           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-//           href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           <Image
-//             aria-hidden
-//             src="/window.svg"
-//             alt="Window icon"
-//             width={16}
-//             height={16}
-//           />
-//           Examples
-//         </a>
-//         <a
-//           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-//           href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           <Image
-//             aria-hidden
-//             src="/globe.svg"
-//             alt="Globe icon"
-//             width={16}
-//             height={16}
-//           />
-//           Go to nextjs.org →
-//         </a>
-//       </footer>
-//     </div>
-//   );
-// }
