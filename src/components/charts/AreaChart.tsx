@@ -1,7 +1,9 @@
 'use client';
 import React, {memo} from 'react';
 import { Line } from 'react-chartjs-2';
-import { faker } from '@faker-js/faker';
+// import { faker } from '@faker-js/faker';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
 
 const AreaChart = () => {
     const options = {
@@ -17,20 +19,23 @@ const AreaChart = () => {
         },
     };
 
-    const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+    // const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 
-    const data = {
-        labels,
-        datasets: [
-            {
-            fill: true,
-            label: 'Dataset 2',
-            data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
-            borderColor: 'rgb(53, 162, 235)',
-            backgroundColor: 'rgba(53, 162, 235, 0.5)',
-            },
-        ],
-    };
+    // const data = {
+    //     labels,
+    //     datasets: [
+    //         {
+    //         fill: true,
+    //         label: 'Dataset 2',
+    //         data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+    //         borderColor: 'rgb(53, 162, 235)',
+    //         backgroundColor: 'rgba(53, 162, 235, 0.5)',
+    //         },
+    //     ],
+    // };
+
+    const data = useSelector((state: RootState) => state.chart.data.Area);
+    
 
     return <Line options={options} data={data} />;
  
